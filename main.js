@@ -190,3 +190,160 @@ for (let i = 1; i <= 30; i++) {
 for (let i = 1; i <= 5; i++) {
     console.log("*".repeat(i));
 }
+
+// ==========================
+// Task 8.1: Arrays
+// ==========================
+
+console.log("=== Task 8.1: Arrays ===");
+
+// Array basics
+const fruits = ["apple", "banana", "orange"];
+const numbers = [1, 2, 3, 4, 5];
+const mixed = ["hello", 42, true, null];
+
+console.log("First fruit:", fruits[0]);
+console.log("Fruits length:", fruits.length);
+
+// Modifying arrays
+fruits.push("grape");
+fruits.unshift("mango");
+fruits.pop();
+fruits.shift();
+
+console.log("Updated fruits:", fruits);
+
+// Array methods
+numbers.forEach(num => console.log("Double:", num * 2));
+
+const doubled = numbers.map(num => num * 2);
+console.log("Doubled:", doubled);
+
+const evenNumbers = numbers.filter(num => num % 2 === 0);
+console.log("Even numbers:", evenNumbers);
+
+const firstEven = numbers.find(num => num % 2 === 0);
+console.log("First even:", firstEven);
+
+const sum = numbers.reduce((total, num) => total + num, 0);
+console.log("Sum:", sum);
+
+console.log("Includes 3:", numbers.includes(3));
+
+// Build tasks
+const nums = [2, -5, 12, 8, -1, 20];
+
+const doubledNums = nums.map(n => n * 2);
+const positiveNums = nums.filter(n => n >= 0);
+const greaterThan10 = nums.find(n => n > 10);
+const product = nums.reduce((acc, n) => acc * n, 1);
+
+console.log("Doubled:", doubledNums);
+console.log("Positive:", positiveNums);
+console.log(">10:", greaterThan10);
+console.log("Product:", product);
+
+
+// ==========================
+// Task 8.2: Objects
+// ==========================
+
+console.log("=== Task 8.2: Objects ===");
+
+const person = {
+    firstName: "John",
+    lastName: "Doe",
+    age: 30,
+    isStudent: false,
+    hobbies: ["reading", "coding"],
+    address: {
+        city: "New York",
+        country: "USA"
+    }
+};
+
+console.log(person.firstName);
+console.log(person["lastName"]);
+console.log(person.address.city);
+
+// Modify
+person.age = 31;
+person.email = "john@example.com";
+delete person.isStudent;
+
+console.log("Updated person:", person);
+
+// Object methods
+const calculator = {
+    add(a, b) {
+        return a + b;
+    },
+    subtract(a, b) {
+        return a - b;
+    },
+    multiply: (a, b) => a * b
+};
+
+console.log("Add:", calculator.add(5, 3));
+
+// Object iteration
+const scores = {
+    math: 95,
+    english: 88,
+    science: 92
+};
+
+console.log("Keys:", Object.keys(scores));
+console.log("Values:", Object.values(scores));
+console.log("Entries:", Object.entries(scores));
+
+for (const [subject, score] of Object.entries(scores)) {
+    console.log(`${subject}: ${score}`);
+}
+
+
+// ==========================
+// Task 8.3: Array of Objects
+// ==========================
+
+console.log("=== Task 8.3: Array of Objects ===");
+
+const students = [
+    { name: "Alice", age: 22, grade: 85, major: "CS" },
+    { name: "Bob", age: 20, grade: 72, major: "Math" },
+    { name: "Charlie", age: 23, grade: 90, major: "CS" },
+    { name: "Diana", age: 21, grade: 88, major: "Physics" },
+    { name: "Eve", age: 22, grade: 95, major: "CS" }
+];
+
+// 1. Names
+const names = students.map(s => s.name);
+console.log("Names:", names);
+
+// 2. Grade > 80
+const highAchievers = students.filter(s => s.grade > 80);
+console.log("High achievers:", highAchievers);
+
+// 3. Find Charlie
+const charlie = students.find(s => s.name === "Charlie");
+console.log("Charlie:", charlie);
+
+// 4. Average grade
+const avgGrade = students.reduce((sum, s) => sum + s.grade, 0) / students.length;
+console.log("Average grade:", avgGrade);
+
+// 5. CS majors
+const csMajors = students.filter(s => s.major === "CS");
+console.log("CS students:", csMajors);
+
+// 6. Sort by grade (descending)
+const sortedByGrade = [...students].sort((a, b) => b.grade - a.grade);
+console.log("Sorted:", sortedByGrade);
+
+// 7. Any grade > 90
+const hasTopStudent = students.some(s => s.grade > 90);
+console.log("Has top student:", hasTopStudent);
+
+// 8. All passing
+const allPassing = students.every(s => s.grade >= 60);
+console.log("All passing:", allPassing);
