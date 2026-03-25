@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Advanced Grade Tracker</title>
+
+<style>
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background: #0f172a;
+    color: #e2e8f0;
+    margin: 0;
+    padding: 20px;
+}
+
+.container {
+    max-width: 800px;
+    margin: auto;
+    background: #1e293b;
+    padding: 20px;
+    border-radius: 12px;
+}
+
+h1 { text-align: center; }
+
+/* Inputs */
+input {
+    padding: 10px;
+    margin: 5px;
+    border-radius: 6px;
+    border: none;
+    width: calc(50% - 12px);
+}
+
+/* Buttons */
+button {
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.add { background: #22c55e; color: white; }
+.clear { background: #ef4444; color: white; }
+
+.actions button {
+    margin: 2px;
+    font-size: 0.8rem;
+}
+
+/* Table */
+table {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 10px;
+    border-bottom: 1px solid #334155;
+    text-align: center;
+}
+
+/* ✨ Improved Search Bar */
+.search {
+    width: 60%;
+    display: block;
+    margin: 15px auto;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #334155;
+    background: #020617;
+    color: #e2e8f0;
+}
+
+/* Chart */
+canvas {
+    margin-top: 20px;
+}
+
+/* Mobile */
+@media(max-width:600px){
+    input {
+        width: 100%;
+    }
+
+    .search {
+        width: 100%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h1>🎓 Grade Tracker</h1>
+
+    <input type="text" id="name" placeholder="Student Name">
+    <input type="number" id="marks" placeholder="Marks">
+    <button class="add" onclick="addStudent()">Add</button>
+    <button class="clear" onclick="clearAll()">Clear</button>
+
+    <p style="text-align:center; opacity:0.7;">Search Student</p>
+    <input class="search" type="text" id="search" placeholder="Type a name..." oninput="displayStudents()">
+
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Marks</th>
+                <th>Grade</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+    </table>
+
+    <h3 id="average">Average: 0</h3>
+
+    <canvas id="chart" height="120"></canvas>
+</div>
+
+<script>
+let students = JSON.parse(localStorage.getItem("students")) || [];
+
+/* Grade Logic */
+function getGrade(marks) {
+    if (marks >= 80) return "A";
+    if (marks >= 70) return "B";
+    if (marks >= 60) return "C";
+    if (marks >= 50) return "D";
+    return "F";
+}
+
+/* Add Student */
+function addStudent() {
+    let name = document.getElementById("name").value.trim();
+    let marks = parseInt(document.getElementById("marks").value);
+
+    if (!name || isNaN(marks)) {
+        alert("Please enter valid data");
+        return;
+    }
+
+    students.push({ name, marks, grade: getGrade(marks) });
+
+    document.getElementById("name").value = "";
+    document.getElementById("marks").value = "";
+
+    save();
+}
+
+/* Delete */
+function deleteStudent(index) {
+    students.splice(index, 1);
+    save();
+}
+
+/* Edit */
+function editStudent(index) {
+    let newMarks = prompt("Enter new marks:");
+    if (newMarks !== null && !isNaN(newMarks)) {
+        students[index].marks = parseInt(newMarks);
+        students[index].grade = getGrade(newMarks);
+        save();
+    }
+}
+
+/* Save */
+function save() {
+    localStorage.setItem("students", JSON.stringify(students));
+    displayStudents();
+}
+
+/* Display */
+function displayStudents() {
+    let table = document.getElementById("tableBody");
+    let search = document.getElementById("search").value.toLowerCase();
+
+    table.innerHTML = "";
+    let total = 0;
+
+    let filtered = students.filter(s => 
+        s.name.toLowerCase().includes(search)
+    );
+
+    filtered.forEach((s, index) => {
+        total += s.marks;
+
+        table.innerHTML += `
+        <tr>
+            <td>${s.name}</td>
+            <td>${s.marks}</td>
+            <td>${s.grade}</td>
+            <td class="actions">
+                <button onclick="editStudent(${index})">Edit</button>
+                <button onclick="deleteStudent(${index})">Delete</button>
+            </td>
+        </tr>`;
+    });
+
+    let avg = filtered.length 
+        ? (total / filtered.length).toFixed(2) 
+        : 0;
+
+    document.getElementById("average").innerText = "Average: " + avg;
+
+    drawChart();
+}
+
+/* Chart */
+function drawChart() {
+    let canvas = document.getElementById("chart");
+    let ctx = canvas.getContext("2d");
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    let grades = {A:0,B:0,C:0,D:0,F:0};
+    students.forEach(s => grades[s.grade]++);
+
+    let values = Object.values(grades);
+    let colors = ["#22c55e","#3b82f6","#f59e0b","#f97316","#ef4444"];
+
+    values.forEach((v, i) => {
+        ctx.fillStyle = colors[i];
+        ctx.fillRect(i * 70, 120 - v * 20, 40, v * 20);
+    });
+}
+
+/* Clear All */
+function clearAll() {
+    students = [];
+    save();
+}
+
+/* Init */
+displayStudents();
+</script>
+
+</body>
+</html>
