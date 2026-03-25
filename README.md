@@ -31,15 +31,18 @@ It accepts user input and displays results instantly, providing a clean and inte
 
 ---
 
-### 2. 🎓 Student Grade Tracker
+### 🎓 Student Grade Tracker (Advanced)
+An interactive web app that:
+- Stores student names and marks using arrays & objects
+- Automatically assigns grades
+- Calculates class average
+- Edit/Delete students
+- Search/filter students
+- Displays a grade distribution chart
+- Saves data using localStorage
+- Responsive and mobile-friendly
 
-This program demonstrates how arrays and objects can be used to manage structured data. It:
-
-* Stores student names and marks
-* Assigns grades based on performance
-* Calculates the class average
-
-This project helped me better understand how to organize and manipulate real-world data in JavaScript.
+👉 Open `grade-tracker.html` to use the app
 
 ---
 
